@@ -14,25 +14,23 @@ class Snowflake(Node):
 
 
 
-    def __init__(self):
+    def __init__(self, angle = 45.0):
 
         super().__init__('snowflake')
 
         self.publisher_ = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
 
-        self.length = 4.0
-
-        self.angle = 45.0
+        self.angle = angle
 
 
 
     def move_turtle_forward(self, length):
 
-        move_cmd = Twist()
+        turtle_mov = Twist()
 
-        move_cmd.linear.x = length
+        turtle_mov.linear.x = length
 
-        self.publisher_.publish(move_cmd)
+        self.publisher_.publish(turtle_mov)
 
         time.sleep(1)
 
@@ -40,51 +38,49 @@ class Snowflake(Node):
 
     def rotate_turtle(self, angle):
 
-        turn_cmd = Twist()
+        turtle_turn = Twist()
 
-        turn_cmd.angular.z = math.radians(angle)
+        turtle_turn.angular.z = math.radians(angle)
 
-        self.publisher_.publish(turn_cmd)
+        self.publisher_.publish(turtle_turn)
 
         time.sleep(1)
 
 
 
-    def draw_segment(self, length):
+    def draw_section(self, length):
 
         self.move_turtle_forward(length)
 
 
 
-    def draw_side_of_snowflake(self, iterations):
+    def draw_side_of_snowflake(self):
 
-        segment_length = self.length / (3 ** iterations)
+        section_length = 0.3
 
-        for _ in range(iterations):
+        for _ in range(2):
 
-            self.draw_segment(segment_length)
+            self.draw_section(section_length)
 
             self.rotate_turtle(-self.angle)
 
-            self.draw_segment(segment_length)
+            self.draw_section(section_length)
 
             self.rotate_turtle(2 * self.angle)
 
-            self.draw_segment(segment_length)
+            self.draw_section(section_length)
 
             self.rotate_turtle(-self.angle)
 
-            self.draw_segment(segment_length)
+            self.draw_section(section_length)
 
 
 
-    def draw_full_snowflake(self, iterations):
+    def draw_full_snowflake(self):
 
-        self.rotate_turtle(-90)  
+        for _ in range(3):
 
-        for _ in range(5):
-
-            self.draw_side_of_snowflake(iterations)
+            self.draw_side_of_snowflake()
 
             self.rotate_turtle(120)
 
@@ -104,11 +100,7 @@ def main(args=None):
 
     
 
-    # Set the number of iterations as needed (e.g., 2 in this example)
-
-    iterations = 3
-
-    s.draw_full_snowflake(iterations)
+    s.draw_full_snowflake()
 
     
 
